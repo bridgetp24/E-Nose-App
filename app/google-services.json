@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "971934253512",
+    "project_id": "smart-nose",
+    "storage_bucket": "smart-nose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971934253512:android:46e6ff2a4d361027ea40fd",
+        "android_client_info": {
+          "package_name": "com.peerbits.nfccardread"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971934253512-cap5e6qcr8u6s1ujtagdqirilc65a5ca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCioLggr8qD3OQiYdGt3Qg1B4iAOn9cDTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971934253512-cap5e6qcr8u6s1ujtagdqirilc65a5ca.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
