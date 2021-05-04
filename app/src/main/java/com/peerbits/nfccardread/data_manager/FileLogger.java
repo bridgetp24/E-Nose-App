@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.peerbits.nfccardread.NfcHome;
 import com.peerbits.nfccardread.R;
 
 import java.io.File;
@@ -29,8 +30,12 @@ public class FileLogger {
 
     private boolean isHeaderExists = false;
 
+    User user = NfcHome.getUser();
+
     public FileLogger() {
         mStringBuilder = new StringBuilder();
+
+        appendHeader(user.toString());
     }
 
     public void appendHeader(String header) {
@@ -51,7 +56,7 @@ public class FileLogger {
 
         try {
             //create file
-            String fileName = timestamp;
+            String fileName = user.getId() + timestamp;
             File file = createFile(fileName);
 
             //add contents to the file

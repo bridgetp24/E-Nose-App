@@ -26,17 +26,18 @@ import com.bhargavms.dotloader.DotLoader;
 import com.peerbits.nfccardread.data_manager.FileLogger;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class NFCRead extends Activity {
 
-    public static final String TAG = NFCRead.class.getSimpleName();
+    public static final String TAG = "NFCReadDebug";
     private TextView tvNFCMessage;
     private NfcAdapter mNfcAdapter;
     private DotLoader dotloader;
     private ImageView ivBack;
-    private final FileLogger mFileLogger = new FileLogger();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,7 @@ public class NFCRead extends Activity {
 
         try {
             Ndef ndef = Ndef.get(tag);
+
             if (ndef != null) {
                 ndef.connect();
                 NdefMessage ndefMessage = ndef.getNdefMessage();
@@ -218,20 +220,42 @@ public class NFCRead extends Activity {
                 }
             } else {
                 NdefFormatable format = NdefFormatable.get(tag);
+                String [] techList = tag.getTechList();
+
+                for(String permission : techList ) {
+                    Log.d(TAG, "Permission: " + permission);
+
+                }
+
                 if (format != null) {
                     try {
                         format.connect();
-                        NdefMessage ndefMessage = ndef.getNdefMessage();
 
-                        if (ndefMessage != null) {
+                        try{
+//
+                            //can't add message on the main thread...
+//                            NdefMessage testMessage = getTestMessage();
+//                            format.format(testMessage);
+
+                            NdefMessage ndefMessage = ndef.getNdefMessage();
                             String message = new String(ndefMessage.getRecords()[0].getPayload());
                             Log.d(TAG, "NFC found.. " + "readFromNFC: " + message);
                             tvNFCMessage.setText(message);
                             ndef.close();
-                        } else {
-                            Toast.makeText(this, "Not able to read from NFC, Please try again...", Toast.LENGTH_LONG).show();
 
+                        } catch(IOException e) {
+                            Log.d(TAG, "IO Exception caught");
+                            e.printStackTrace();
+                            Toast.makeText(this, "Not able to read from NFC, Please try again...", Toast.LENGTH_LONG).show();
+                        }catch(NullPointerException e) {
+                            Log.d(TAG, "Null pointer exception caught");
+
+                            Toast.makeText(this, "Not able to read from NFC, Please try again...", Toast.LENGTH_LONG).show();
+                        } finally{
+                           // format.close();
                         }
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -243,5 +267,30 @@ public class NFCRead extends Activity {
             e.printStackTrace();
         }
 
+    }
+
+    public NdefMessage getTestMessage() {
+        String msg = "Test Message";
+        byte[] languageCode;
+        byte[] msgBytes;
+        languageCode = "en".getBytes(StandardCharsets.US_ASCII);
+        msgBytes = msg.getBytes(StandardCharsets.UTF_8);
+
+        byte[] messagePayload = new byte[1 + languageCode.length
+                + msgBytes.length];
+        messagePayload[0] = (byte) 0x02; // status byte: UTF-8 encoding and
+        // length of language code is 2
+        System.arraycopy(languageCode, 0, messagePayload, 1,
+                languageCode.length);
+        System.arraycopy(msgBytes, 0, messagePayload, 1 + languageCode.length,
+                msgBytes.length);
+
+        NdefMessage message;
+        NdefRecord[] records = new NdefRecord[1];
+        NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,
+                NdefRecord.RTD_TEXT, new byte[]{}, messagePayload);
+        records[0] = textRecord;
+        message = new NdefMessage(records);
+        return message;
     }
 }

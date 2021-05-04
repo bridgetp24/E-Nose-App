@@ -36,4 +36,5 @@ dependencies {
     // implementation 'com.github.pro100svitlo:creditCardNfcReader:1.0.3'
     implementation 'com.google.firebase:firebase-storage:19.2.2'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-installations:16.3.5'
 }

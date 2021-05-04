@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peerbits.nfccardread.data_manager.FileLogger;
+import com.peerbits.nfccardread.data_manager.User;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -16,6 +17,9 @@ public class NfcHome extends Activity implements View.OnClickListener {
 
     public static final String TAG = NfcHome.class.getSimpleName();
     private RelativeLayout rlRead;
+
+
+    private static User user;
     //private RelativeLayout rlWrite;
    // private RelativeLayout rlCreditCard;
     //private ImageView ivHomeicon;
@@ -27,7 +31,7 @@ public class NfcHome extends Activity implements View.OnClickListener {
         setContentView(R.layout.nfc_home);
         initViews();
         rlRead.setOnClickListener(this);
-
+        user = new User();
         //rlWrite.setOnClickListener(this);
         //rlCreditCard.setOnClickListener(this);
 
@@ -51,7 +55,7 @@ public class NfcHome extends Activity implements View.OnClickListener {
             case R.id.rlReadNFCTAG:
                 intent = new Intent(this, NFCRead.class);
                 this.startActivity(intent);
-             //   testUpload();
+               // testUpload();
                 break;
 
             //case R.id.rlWriteWithNFC:
@@ -108,4 +112,9 @@ public class NfcHome extends Activity implements View.OnClickListener {
         //ivHomeicon.clearAnimation();
         super.onPause();
     }
+
+    public static User getUser() {
+        return user;
+    }
+
 }
